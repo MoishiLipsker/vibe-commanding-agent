@@ -1,0 +1,67 @@
+{
+    "name": "Target",
+    "description": "A target entity representing a potential threat or objective",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the target"
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "description": "Type of target (e.g., vehicle, building, person)",
+            "enum": ["vehicle", "building", "person", "other"]
+        },
+        "priority": {
+            "type": "string",
+            "required": true,
+            "description": "Priority level of the target",
+            "enum": ["high", "medium", "low"]
+        },
+        "location": {
+            "type": "object",
+            "required": true,
+            "description": "Geographic location of the target",
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "required": true
+                },
+                "lon": {
+                    "type": "number",
+                    "required": true
+                },
+                "alt": {
+                    "type": "number",
+                    "required": false
+                }
+            }
+        },
+        "status": {
+            "type": "string",
+            "required": true,
+            "description": "Current status of the target",
+            "enum": ["active", "neutralized", "unknown"]
+        },
+        "confidence": {
+            "type": "number",
+            "required": true,
+            "description": "Confidence level in target identification (0-100)",
+            "minimum": 0,
+            "maximum": 100
+        },
+        "last_updated": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of last update",
+            "format": "date-time"
+        },
+        "metadata": {
+            "type": "object",
+            "required": false,
+            "description": "Additional metadata about the target",
+            "additionalProperties": true
+        }
+    }
+} 

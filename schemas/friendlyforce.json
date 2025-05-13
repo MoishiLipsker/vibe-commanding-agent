@@ -1,0 +1,105 @@
+{
+    "name": "FriendlyForce",
+    "description": "A friendly force entity representing allied units or assets",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the friendly force"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "description": "Name or designation of the friendly force"
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "description": "Type of friendly force",
+            "enum": ["infantry", "vehicle", "aircraft", "ship", "other"]
+        },
+        "status": {
+            "type": "string",
+            "required": true,
+            "description": "Current status of the friendly force",
+            "enum": ["active", "inactive", "damaged", "destroyed"]
+        },
+        "location": {
+            "type": "object",
+            "required": true,
+            "description": "Current location of the friendly force",
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "required": true
+                },
+                "lon": {
+                    "type": "number",
+                    "required": true
+                },
+                "alt": {
+                    "type": "number",
+                    "required": false
+                }
+            }
+        },
+        "capabilities": {
+            "type": "array",
+            "required": false,
+            "description": "List of capabilities of the friendly force",
+            "items": {
+                "type": "string"
+            }
+        },
+        "equipment": {
+            "type": "array",
+            "required": false,
+            "description": "List of equipment carried by the friendly force",
+            "items": {
+                "type": "string"
+            }
+        },
+        "personnel": {
+            "type": "object",
+            "required": false,
+            "description": "Personnel information",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "required": true,
+                    "minimum": 0
+                },
+                "status": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["ready", "injured", "casualty"]
+                }
+            }
+        },
+        "command": {
+            "type": "object",
+            "required": false,
+            "description": "Command information",
+            "properties": {
+                "unit": {
+                    "type": "string",
+                    "required": true
+                },
+                "commander": {
+                    "type": "string",
+                    "required": false
+                },
+                "parent_unit": {
+                    "type": "string",
+                    "required": false
+                }
+            }
+        },
+        "last_updated": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of last update",
+            "format": "date-time"
+        }
+    }
+} 

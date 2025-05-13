@@ -1,0 +1,91 @@
+{
+    "name": "Arrow",
+    "description": "A directional arrow entity representing movement or direction",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the arrow"
+        },
+        "start_point": {
+            "type": "object",
+            "required": true,
+            "description": "Starting point of the arrow",
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "required": true
+                },
+                "lon": {
+                    "type": "number",
+                    "required": true
+                },
+                "alt": {
+                    "type": "number",
+                    "required": false
+                }
+            }
+        },
+        "end_point": {
+            "type": "object",
+            "required": true,
+            "description": "Ending point of the arrow",
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "required": true
+                },
+                "lon": {
+                    "type": "number",
+                    "required": true
+                },
+                "alt": {
+                    "type": "number",
+                    "required": false
+                }
+            }
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "description": "Type of arrow",
+            "enum": ["movement", "direction", "attack", "retreat", "other"]
+        },
+        "style": {
+            "type": "object",
+            "required": false,
+            "description": "Visual style of the arrow",
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "description": "Color of the arrow"
+                },
+                "width": {
+                    "type": "number",
+                    "description": "Width of the arrow line"
+                },
+                "dashed": {
+                    "type": "boolean",
+                    "description": "Whether the arrow line is dashed"
+                }
+            }
+        },
+        "description": {
+            "type": "string",
+            "required": false,
+            "description": "Additional description of the arrow's purpose"
+        },
+        "created_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of arrow creation",
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of last update",
+            "format": "date-time"
+        }
+    }
+} 

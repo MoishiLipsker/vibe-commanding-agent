@@ -1,0 +1,181 @@
+{
+    "name": "FireMission",
+    "description": "A fire mission entity representing an artillery or air support mission",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the fire mission"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "description": "Name of the fire mission"
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "description": "Type of fire mission",
+            "enum": ["artillery", "mortar", "air_strike", "naval_gunfire", "other"]
+        },
+        "priority": {
+            "type": "string",
+            "required": true,
+            "description": "Priority level of the fire mission",
+            "enum": ["immediate", "priority", "routine"]
+        },
+        "status": {
+            "type": "string",
+            "required": true,
+            "description": "Current status of the fire mission",
+            "enum": ["pending", "in_progress", "completed", "cancelled"]
+        },
+        "target": {
+            "type": "object",
+            "required": true,
+            "description": "Target information",
+            "properties": {
+                "location": {
+                    "type": "object",
+                    "required": true,
+                    "properties": {
+                        "lat": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "lon": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "alt": {
+                            "type": "number",
+                            "required": false
+                        }
+                    }
+                },
+                "description": {
+                    "type": "string",
+                    "required": false,
+                    "description": "Description of the target"
+                },
+                "size": {
+                    "type": "string",
+                    "required": false,
+                    "description": "Size of the target area",
+                    "enum": ["point", "small", "medium", "large"]
+                }
+            }
+        },
+        "firing_unit": {
+            "type": "object",
+            "required": true,
+            "description": "Information about the firing unit",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "required": true
+                },
+                "type": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["artillery", "mortar", "aircraft", "ship"]
+                },
+                "location": {
+                    "type": "object",
+                    "required": true,
+                    "properties": {
+                        "lat": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "lon": {
+                            "type": "number",
+                            "required": true
+                        }
+                    }
+                }
+            }
+        },
+        "ammunition": {
+            "type": "object",
+            "required": true,
+            "description": "Ammunition details",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "required": true,
+                    "description": "Type of ammunition"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "required": true,
+                    "minimum": 1
+                },
+                "effects": {
+                    "type": "array",
+                    "required": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Expected effects of the ammunition"
+                }
+            }
+        },
+        "timing": {
+            "type": "object",
+            "required": true,
+            "description": "Timing information",
+            "properties": {
+                "requested_time": {
+                    "type": "string",
+                    "required": true,
+                    "format": "date-time",
+                    "description": "Requested time of fire"
+                },
+                "estimated_time": {
+                    "type": "string",
+                    "required": false,
+                    "format": "date-time",
+                    "description": "Estimated time of fire"
+                },
+                "duration": {
+                    "type": "integer",
+                    "required": false,
+                    "description": "Expected duration in seconds"
+                }
+            }
+        },
+        "safety": {
+            "type": "object",
+            "required": true,
+            "description": "Safety considerations",
+            "properties": {
+                "minimum_safe_distance": {
+                    "type": "number",
+                    "required": true,
+                    "description": "Minimum safe distance in meters"
+                },
+                "restrictions": {
+                    "type": "array",
+                    "required": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Safety restrictions"
+                }
+            }
+        },
+        "created_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of mission creation",
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of last update",
+            "format": "date-time"
+        }
+    }
+} 

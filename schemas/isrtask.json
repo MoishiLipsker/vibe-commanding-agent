@@ -1,0 +1,113 @@
+{
+    "name": "ISRTask",
+    "description": "An Intelligence, Surveillance, and Reconnaissance task",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the ISR task"
+        },
+        "target_id": {
+            "type": "string",
+            "required": true,
+            "description": "ID of the target to surveil"
+        },
+        "priority": {
+            "type": "string",
+            "required": true,
+            "description": "Priority level of the task",
+            "enum": ["high", "medium", "low"]
+        },
+        "status": {
+            "type": "string",
+            "required": true,
+            "description": "Current status of the task",
+            "enum": ["pending", "in_progress", "completed", "failed"]
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "description": "Type of ISR task",
+            "enum": ["surveillance", "reconnaissance", "intelligence_gathering"]
+        },
+        "assigned_to": {
+            "type": "string",
+            "required": false,
+            "description": "ID of the unit or asset assigned to the task"
+        },
+        "start_time": {
+            "type": "string",
+            "required": true,
+            "description": "Planned start time of the task",
+            "format": "date-time"
+        },
+        "end_time": {
+            "type": "string",
+            "required": false,
+            "description": "Planned end time of the task",
+            "format": "date-time"
+        },
+        "location": {
+            "type": "object",
+            "required": true,
+            "description": "Area of operation for the task",
+            "properties": {
+                "center": {
+                    "type": "object",
+                    "required": true,
+                    "properties": {
+                        "lat": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "lon": {
+                            "type": "number",
+                            "required": true
+                        }
+                    }
+                },
+                "radius": {
+                    "type": "number",
+                    "required": true,
+                    "description": "Radius of operation in meters"
+                }
+            }
+        },
+        "requirements": {
+            "type": "object",
+            "required": false,
+            "description": "Specific requirements for the task",
+            "properties": {
+                "sensors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Required sensor types"
+                },
+                "resolution": {
+                    "type": "string",
+                    "description": "Required resolution level",
+                    "enum": ["high", "medium", "low"]
+                },
+                "coverage": {
+                    "type": "string",
+                    "description": "Required coverage type",
+                    "enum": ["continuous", "periodic", "spot"]
+                }
+            }
+        },
+        "created_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of task creation",
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of last update",
+            "format": "date-time"
+        }
+    }
+} 

@@ -578,7 +578,8 @@ async def send_message(request: Request, thread_id: str):
     run = await langgraph_client.runs.create(
         thread_id=thread_id,
         assistant_id="agent",
-        input={"messages": [{"type": "human", "content": msg}]},
+        #input={"messages": [{"type": "human", "content": msg}]},
+        input={"input": msg},
         stream_mode="messages-tuple",
     )
     run_id = run["run_id"]

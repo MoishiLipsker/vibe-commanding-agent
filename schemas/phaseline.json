@@ -1,0 +1,86 @@
+{
+    "name": "PhaseLine",
+    "description": "A phase line entity representing a boundary or checkpoint in an operation",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the phase line"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "description": "Name or designation of the phase line"
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "description": "Type of phase line",
+            "enum": ["boundary", "checkpoint", "objective", "other"]
+        },
+        "points": {
+            "type": "array",
+            "required": true,
+            "description": "Array of points defining the phase line",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "lat": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "lon": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "alt": {
+                        "type": "number",
+                        "required": false
+                    }
+                }
+            },
+            "minItems": 2
+        },
+        "style": {
+            "type": "object",
+            "required": false,
+            "description": "Visual style of the phase line",
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "description": "Color of the phase line"
+                },
+                "width": {
+                    "type": "number",
+                    "description": "Width of the line"
+                },
+                "dashed": {
+                    "type": "boolean",
+                    "description": "Whether the line is dashed"
+                }
+            }
+        },
+        "description": {
+            "type": "string",
+            "required": false,
+            "description": "Additional description of the phase line's purpose"
+        },
+        "operation": {
+            "type": "string",
+            "required": false,
+            "description": "Associated operation or mission"
+        },
+        "created_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of phase line creation",
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of last update",
+            "format": "date-time"
+        }
+    }
+} 
