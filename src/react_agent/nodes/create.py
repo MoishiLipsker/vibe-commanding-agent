@@ -8,13 +8,9 @@ from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from pydantic import BaseModel, Field
 
 from react_agent.configuration import Configuration
-from react_agent.state import State, EntityType
+from react_agent.state import State, EntityData
 from react_agent.utils import load_chat_model
 
-
-class EntityData(BaseModel):
-    type: str = Field(..., description="The type of entity being created")
-    data: Dict = Field(..., description="The entity data following the schema")
 
 entity_parser = PydanticOutputParser(pydantic_object=EntityData)
 
@@ -43,7 +39,7 @@ def generate_few_shot_examples(entity_type: str, schema: str) -> list:
     ]
 
 
-async def action_parser(state: State) -> Dict[str, EntityType]:
+async def action_parser(state: State) -> Dict[str, EntityData]:
     """Process the action part into structured entity data.
     
     Args:
@@ -52,14 +48,15 @@ async def action_parser(state: State) -> Dict[str, EntityType]:
     Returns:
         Dict[str, Entity]: Structured entity data.
     """
+     # First, use entity_name_extract to identify the entity type
+    entity_type = state.entity_type_action
+    if entity_type is None:
+        return {}
     configuration = Configuration.from_context()
     model = load_chat_model(configuration.model)
     
     # Use the appropriate action text based on the flow
     action_text = state.trigger_parts.action if state.trigger_parts else state.input
-    
-    # First, use entity_name_extract to identify the entity type
-    entity_type = state.entity_type_action
     
     # Get the entity schema
     schema = await configuration.get_entity_schema(entity_type)
@@ -109,4 +106,4 @@ async def action_parser(state: State) -> Dict[str, EntityType]:
 
     result = await splitter_chain.ainvoke({"input": action_text})
     
-    return {"entity": EntityType(type=result.type, data=result.data)} 
+    return {"entity": result} 

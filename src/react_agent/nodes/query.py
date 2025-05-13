@@ -30,6 +30,7 @@ class QueryParser:
         """Initialize the QueryParser with configuration and model."""
         self.configuration = Configuration.from_context()
         self.model = load_chat_model(self.configuration.model)
+        # self.model.with_structured_output(QueryParams)
     
     async def _generate_query_for_entity(self, entity_type: str, query_text: str) -> QueryParams:
         """Generate structured query parameters for a specific entity type.
@@ -60,6 +61,9 @@ class QueryParser:
         The following examples are for illustration only - they may not match the actual schema fields.
         You must use ONLY the fields that exist in the schema provided below.
         
+        Entity Type:
+        {entity_type}
+        
         Entity Schema:
         {schema}
         
@@ -70,7 +74,7 @@ class QueryParser:
         FEW_SHOT = [
             HumanMessage("targets with high priority in sector A"),
             AIMessage(QueryParams(
-                entity_type="targets",
+                entity_type="Target",
                 filters={
                     "priority": "high",
                     "location": {"sector": "A"}
@@ -79,7 +83,7 @@ class QueryParser:
             
             HumanMessage("friendly forces that are active"),
             AIMessage(QueryParams(
-                entity_type="forces",
+                entity_type="FriendlyForce",
                 filters={
                     "status": "active",
                     "type": "friendly"
@@ -88,7 +92,7 @@ class QueryParser:
             
             HumanMessage("ISR tasks assigned to unit Bravo"),
             AIMessage(QueryParams(
-                entity_type="tasks",
+                entity_type="ISRTask",
                 filters={
                     "assigned_to": "Bravo"
                 },
@@ -98,7 +102,7 @@ class QueryParser:
         prompt = ChatPromptTemplate.from_messages([
             SystemMessage(SYSTEM_PROMPT),
             *FEW_SHOT,
-            HumanMessagePromptTemplate.from_template("{input}"),
+            HumanMessagePromptTemplate.from_template("return the query parameters for the following query: {input}"),
         ])
         
         chain = prompt | self.model | parser

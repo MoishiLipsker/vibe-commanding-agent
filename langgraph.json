@@ -1,7 +1,8 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "agent": "./src/react_agent/graph.py:graph"
+    "agent": "./src/react_agent/graph.py:graph",
+    "rag": "./src/react_agent/rag.py:rag"
   },
   "env": ".env",
   "auth": {

@@ -24,7 +24,6 @@ SYSTEM_PROMPT = f"""
 Classify the action type into one of:
 - 'create_entity': Creating a new entity
 - 'update_entity': Updating an existing entity that needs to be found first
-- 'update_entity_without_query': Updating an entity that was already found (e.g. from a trigger)
 
 Expected output JSON structure:
 {action_parser.get_format_instructions()}
@@ -34,8 +33,8 @@ FEW_SHOT = [
     HumanMessage("Create a new target at coordinates 32.123, 34.456"),
     AIMessage(ActionClassification(action_type=ActionType.CREATE).model_dump_json()),
     
-    HumanMessage("Update the status of the target we found to 'neutralized'"),
-    AIMessage(ActionClassification(action_type=ActionType.UPDATE_WITHOUT_QUERY).model_dump_json()),
+    #HumanMessage("Update the status of the target we found to 'neutralized'"),
+    #AIMessage(ActionClassification(action_type=ActionType.UPDATE_WITHOUT_QUERY).model_dump_json()),
     
     HumanMessage("Change the priority of all targets in sector A to high"),
     AIMessage(ActionClassification(action_type=ActionType.UPDATE).model_dump_json())

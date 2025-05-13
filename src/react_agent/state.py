@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, TypedDict, Any, Literal, Sequence
+from typing import Dict, List, Optional, Any, Sequence
 from pydantic import BaseModel, Field
 from enum import Enum
-from typing_extensions import Annotated, TypedDict
-from langchain_core.messages import (
-    BaseMessage
-)
+from typing_extensions import Annotated
+from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
 
 
@@ -17,7 +15,7 @@ class ActionType(str, Enum):
     """Types of actions that can be performed."""
     CREATE = "create_entity"
     UPDATE = "update_entity"
-    UPDATE_WITHOUT_QUERY = "update_entity_without_query"
+    # UPDATE_WITHOUT_QUERY = "update_entity_without_query"
 
 # --- Type Definitions ---
 
@@ -33,11 +31,11 @@ class TriggerParts(BaseModel):
 
 class ProcessedTrigger(BaseModel):
     query: QueryParams
-    action: EntityType
+    action: EntityData
 
-class EntityType(BaseModel):
-    type: str
-    data: Dict[str, Any]
+class EntityData(BaseModel):
+    type: str = Field(..., description="The type of entity being created")
+    properties: Dict = Field(..., description="The entity properties following the schema")
 
 class InputState(BaseModel):
     """Input state for the workflow."""
@@ -75,7 +73,7 @@ class State(BaseModel):
     destination_query_params: Optional[QueryParams] = Field(None, description="The destination part of a geographic query")
 
     action_type: Optional[ActionType] = Field(None, description="The type of action")
-    entity: Optional[EntityType] = Field(None, description="The action entity parameters")
+    entity: Optional[EntityData] = Field(None, description="The action entity parameters")
        
     # API specific
     api_response: Optional[dict] = Field(None, description="Response from API calls")
@@ -85,6 +83,6 @@ class State(BaseModel):
     # Status tracking
     status: Optional[str] = Field(None, description="Current status of the workflow")
     error: Optional[str] = Field(None, description="Error message if any")
-    
+    errors: Annotated[Sequence[str], add_messages] = Field(default_factory=list, description="List of errors that occurred during processing")
     class Config:
         arbitrary_types_allowed = True

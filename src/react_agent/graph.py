@@ -1,13 +1,5 @@
 """A simple chatbot."""
 
-from langgraph.prebuilt import create_react_agent
-
-graph1 = create_react_agent(
-      "anthropic:claude-3-5-haiku-latest",
-      tools=[],
-      prompt="You are a friendly, curious, geeky AI.",
-)
-
 """Define the workflow for entity management and trigger creation."""
 from langgraph.graph import StateGraph, END
 from react_agent.state import State, InputState, OutputState

@@ -95,8 +95,8 @@ async def api_agent(state: State) -> Dict[str, str]:
             }
             
             async with aiohttp.ClientSession() as session:
-                async with session.put(
-                    f"{base_url}/entities/update/",
+                async with session.post(
+                    f"{base_url}/entities/update-by-query/",
                     json=jsonable_encoder(action_data)
                 ) as response:
                     update_response = await response.json()
@@ -107,17 +107,22 @@ async def api_agent(state: State) -> Dict[str, str]:
             async with aiohttp.ClientSession() as session:
                 async with session.post(f"{base_url}/entities/add", json=jsonable_encoder(state.entity)) as response:
                     create_response = await response.json()
-                    return {"response": f"Successfully created entity: {create_response}"}
+                    return {"response": f"Successfully created entity: {create_response}",
+                            "messages": [AIMessage(f"Successfully created entity: {create_response}")]}
         
         # Handle queries
-        elif state.query_params:       
+        elif state.query_params:
+            query_params = {} # state.query_params.filters
+            query_params["type"] = state.query_params.entity_type
             async with aiohttp.ClientSession() as session:
                 async with session.get(
                     f"{base_url}/entities/query",
-                    params=jsonable_encoder(state.query_params)
+                    params=jsonable_encoder(query_params)
                 ) as response:
                     query_response = await response.json()
-                    return {"response": f"Query results: {query_response}"}
+                    print(response.url)
+                    return {"response": f"Query results: {query_response}",
+                            "messages": [AIMessage(f"Query results: {query_response}")]}
         
         return {"response": "No valid operation found in state"}
         
