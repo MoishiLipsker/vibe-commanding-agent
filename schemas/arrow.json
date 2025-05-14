@@ -7,44 +7,14 @@
             "required": true,
             "description": "Unique identifier for the arrow"
         },
-        "start_point": {
-            "type": "object",
-            "required": true,
-            "description": "Starting point of the arrow",
-            "properties": {
-                "lat": {
-                    "type": "number",
-                    "required": true
-                },
-                "lon": {
-                    "type": "number",
-                    "required": true
-                },
-                "alt": {
-                    "type": "number",
-                    "required": false
-                }
-            }
-        },
-        "end_point": {
-            "type": "object",
-            "required": true,
-            "description": "Ending point of the arrow",
-            "properties": {
-                "lat": {
-                    "type": "number",
-                    "required": true
-                },
-                "lon": {
-                    "type": "number",
-                    "required": true
-                },
-                "alt": {
-                    "type": "number",
-                    "required": false
-                }
-            }
-        },
+         "coordinates": {
+            "type": "LineString",
+            "coordinates": [
+              [34.8, 32.0],
+              [34.85, 32.05],
+              [34.9, 32.1]
+            ]
+          },
         "type": {
             "type": "string",
             "required": true,
