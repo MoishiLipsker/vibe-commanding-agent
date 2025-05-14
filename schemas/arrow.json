@@ -1,8 +1,8 @@
 {
-    "name": "Arrow",
+    "type": "arrow",
     "description": "A directional arrow entity representing movement or direction",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the arrow"
@@ -22,35 +22,39 @@
                 }
             }]
         },
-        "type": {
+           "assigned_to": {
+            "type": "string",
+            "required": false,
+            "description": "ID of the executing unit"
+        },
+         "status": {
+            "type": "string",
+            "required": true,
+            "description": "Current status of the arrow",
+            "default":"inactive",
+            "enum": ["active", "inactive"]
+        },
+        "arrowType": {
             "type": "string",
             "required": true,
             "description": "Type of arrow",
+            "defaultValue":"movement",
             "enum": ["movement", "direction", "attack", "retreat", "other"]
-        },
-        "style": {
-            "type": "object",
-            "required": false,
-            "description": "Visual style of the arrow",
-            "properties": {
-                "color": {
-                    "type": "string",
-                    "description": "Color of the arrow"
-                },
-                "width": {
-                    "type": "number",
-                    "description": "Width of the arrow line"
-                },
-                "dashed": {
-                    "type": "boolean",
-                    "description": "Whether the arrow line is dashed"
-                }
-            }
         },
         "description": {
             "type": "string",
             "required": false,
             "description": "Additional description of the arrow's purpose"
+        },
+        "createdBy": {
+            "type": "string",
+            "required": true,
+            "description": "User ID who created the entity"
+        },
+        "updatedBy": {
+            "type": "string",
+            "required": false,
+            "description": "User ID who last updated the entity"
         },
         "created_at": {
             "type": "string",
