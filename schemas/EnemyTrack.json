@@ -1,0 +1,62 @@
+{
+    "name": "EnemyTrack",
+    "description": "An entity representing an enemy force, such as a platoon or unit",
+    "fields": {
+        "id": {
+            "type": "string",
+            "required": true,
+            "description": "Unique identifier for the enemy force"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "description": "Name or designation of the enemy force"
+        },
+        "weapon": {
+            "type": "string",
+            "required": true,
+            "description": "Type of enemy force",
+            "enum": ["armor", "infantry", "artillery", "UAV", "HQ", "helicopter", "tank"]
+        },
+        "status": {
+            "type": "string",
+            "required": true,
+            "description": "Current status of the enemy force",
+            "enum": ["active", "inactive", "destroyed"]
+        },
+        "location": {
+            "type": "object",
+            "required": true,
+            "description": "Current location of the enemy force",
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "required": true,
+                    "description": "Latitude of the force location"
+                }
+            }
+        },
+        "createdBy": {
+            "type": "string",
+            "required": true,
+            "description": "User ID who created the entity"
+        },
+        "updatedBy": {
+            "type": "string",
+            "required": false,
+            "description": "User ID who last updated the entity"
+        },
+        "creationTime": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of creation",
+            "format": "date-time"
+        },
+        "LUT": {
+            "type": "string",
+            "required": true,
+            "description": "Last Update Time",
+            "format": "date-time"
+        }
+    }
+}
