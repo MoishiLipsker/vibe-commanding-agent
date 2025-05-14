@@ -7,14 +7,21 @@
             "required": true,
             "description": "Unique identifier for the arrow"
         },
-         "coordinates": {
-            "type": "LineString",
-            "coordinates": [
-              [34.8, 32.0],
-              [34.85, 32.05],
-              [34.9, 32.1]
-            ]
-          },
+         "location": {
+            "type": "object",
+            "required": true,
+            "description": "Current location of the phase line",
+            "properties": [{
+                "lat": {
+                    "type": "number",
+                    "required": true
+                },
+                "lon": {
+                    "type": "number",
+                    "required": true
+                }
+            }]
+        },
         "type": {
             "type": "string",
             "required": true,
