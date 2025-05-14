@@ -12,17 +12,20 @@
             "required": true,
             "description": "Name of the fire mission"
         },
-        "type": {
-            "type": "string",
+        "location": {
+            "type": "object",
             "required": true,
-            "description": "Type of fire mission",
-            "enum": ["artillery", "mortar", "air_strike", "naval_gunfire", "other"]
-        },
-        "priority": {
-            "type": "string",
-            "required": true,
-            "description": "Priority level of the fire mission",
-            "enum": ["immediate", "priority", "routine"]
+            "description": "Current location of the fire mission",
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "required": true
+                },
+                "lon": {
+                    "type": "number",
+                    "required": true
+                }
+            }
         },
         "status": {
             "type": "string",
@@ -31,139 +34,20 @@
             "enum": ["pending", "in_progress", "completed", "cancelled"]
         },
         "target": {
-            "type": "object",
+            "type": "string",
             "required": true,
-            "description": "Target information",
-            "properties": {
-                "location": {
-                    "type": "object",
-                    "required": true,
-                    "properties": {
-                        "lat": {
-                            "type": "number",
-                            "required": true
-                        },
-                        "lon": {
-                            "type": "number",
-                            "required": true
-                        },
-                        "alt": {
-                            "type": "number",
-                            "required": false
-                        }
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "required": false,
-                    "description": "Description of the target"
-                },
-                "size": {
-                    "type": "string",
-                    "required": false,
-                    "description": "Size of the target area",
-                    "enum": ["point", "small", "medium", "large"]
-                }
-            }
+            "description": "Target entity"
         },
-        "firing_unit": {
-            "type": "object",
-            "required": true,
-            "description": "Information about the firing unit",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "required": true
-                },
-                "type": {
-                    "type": "string",
-                    "required": true,
-                    "enum": ["artillery", "mortar", "aircraft", "ship"]
-                },
-                "location": {
-                    "type": "object",
-                    "required": true,
-                    "properties": {
-                        "lat": {
-                            "type": "number",
-                            "required": true
-                        },
-                        "lon": {
-                            "type": "number",
-                            "required": true
-                        }
-                    }
-                }
-            }
+        "assigned_to": {
+            "type": "string",
+            "required": false,
+            "description": "ID of the unit or asset assigned to the task"
         },
         "ammunition": {
-            "type": "object",
+            "type": "string",
             "required": true,
-            "description": "Ammunition details",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "required": true,
-                    "description": "Type of ammunition"
-                },
-                "quantity": {
-                    "type": "integer",
-                    "required": true,
-                    "minimum": 1
-                },
-                "effects": {
-                    "type": "array",
-                    "required": false,
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Expected effects of the ammunition"
-                }
-            }
-        },
-        "timing": {
-            "type": "object",
-            "required": true,
-            "description": "Timing information",
-            "properties": {
-                "requested_time": {
-                    "type": "string",
-                    "required": true,
-                    "format": "date-time",
-                    "description": "Requested time of fire"
-                },
-                "estimated_time": {
-                    "type": "string",
-                    "required": false,
-                    "format": "date-time",
-                    "description": "Estimated time of fire"
-                },
-                "duration": {
-                    "type": "integer",
-                    "required": false,
-                    "description": "Expected duration in seconds"
-                }
-            }
-        },
-        "safety": {
-            "type": "object",
-            "required": true,
-            "description": "Safety considerations",
-            "properties": {
-                "minimum_safe_distance": {
-                    "type": "number",
-                    "required": true,
-                    "description": "Minimum safe distance in meters"
-                },
-                "restrictions": {
-                    "type": "array",
-                    "required": false,
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Safety restrictions"
-                }
-            }
+            "description": "Priority level of the fire mission",
+            "enum": [""HE-shell", "smoke", "precision-guided", "cluster"]
         },
         "created_at": {
             "type": "string",
