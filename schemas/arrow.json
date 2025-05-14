@@ -7,11 +7,11 @@
             "required": true,
             "description": "Unique identifier for the arrow"
         },
-        "start_point": {
+         "location": {
             "type": "object",
             "required": true,
-            "description": "Starting point of the arrow",
-            "properties": {
+            "description": "Current location of the phase line",
+            "properties": [{
                 "lat": {
                     "type": "number",
                     "required": true
@@ -19,31 +19,8 @@
                 "lon": {
                     "type": "number",
                     "required": true
-                },
-                "alt": {
-                    "type": "number",
-                    "required": false
                 }
-            }
-        },
-        "end_point": {
-            "type": "object",
-            "required": true,
-            "description": "Ending point of the arrow",
-            "properties": {
-                "lat": {
-                    "type": "number",
-                    "required": true
-                },
-                "lon": {
-                    "type": "number",
-                    "required": true
-                },
-                "alt": {
-                    "type": "number",
-                    "required": false
-                }
-            }
+            }]
         },
         "type": {
             "type": "string",

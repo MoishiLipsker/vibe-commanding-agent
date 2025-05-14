@@ -11,13 +11,7 @@
             "type": "string",
             "required": true,
             "description": "Type of target (e.g., vehicle, building, person)",
-            "enum": ["vehicle", "building", "person", "other"]
-        },
-        "priority": {
-            "type": "string",
-            "required": true,
-            "description": "Priority level of the target",
-            "enum": ["high", "medium", "low"]
+            "enum": ["vehicle", "building", "person", "smoke"]
         },
         "location": {
             "type": "object",
@@ -31,10 +25,6 @@
                 "lon": {
                     "type": "number",
                     "required": true
-                },
-                "alt": {
-                    "type": "number",
-                    "required": false
                 }
             }
         },
@@ -42,26 +32,19 @@
             "type": "string",
             "required": true,
             "description": "Current status of the target",
-            "enum": ["active", "neutralized", "unknown"]
+            "enum": ["active", "destroyed", "pending"]
         },
-        "confidence": {
-            "type": "number",
+       "created_at": {
+            "type": "string",
             "required": true,
-            "description": "Confidence level in target identification (0-100)",
-            "minimum": 0,
-            "maximum": 100
+            "description": "Timestamp of mission creation",
+            "format": "date-time"
         },
-        "last_updated": {
+        "updated_at": {
             "type": "string",
             "required": true,
             "description": "Timestamp of last update",
             "format": "date-time"
-        },
-        "metadata": {
-            "type": "object",
-            "required": false,
-            "description": "Additional metadata about the target",
-            "additionalProperties": true
         }
     }
 } 

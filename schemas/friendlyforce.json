@@ -36,10 +36,6 @@
                 "lon": {
                     "type": "number",
                     "required": true
-                },
-                "alt": {
-                    "type": "number",
-                    "required": false
                 }
             }
         },
