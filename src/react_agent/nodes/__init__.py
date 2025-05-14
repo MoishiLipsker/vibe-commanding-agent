@@ -36,7 +36,7 @@ from .entity_name import entity_name_extract
 from .geographic import geographic_extract
 from .check_geographic import check_geographic
 
-# Wrap all node functions with error handling
+# Wrap all node functions with error handling only
 classify_input = error_handler(classify_input)
 trigger_extract = error_handler(trigger_extract)
 check_geographic = error_handler(check_geographic)

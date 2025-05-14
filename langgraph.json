@@ -2,7 +2,9 @@
   "dependencies": ["."],
   "graphs": {
     "agent": "./src/react_agent/graph.py:graph",
-    "rag": "./src/react_agent/rag.py:rag"
+    "rag": "./src/react_agent/rag.py:rag",
+    "diff": "./src/react_agent/diff.py:diff",
+    "action_flow": "./src/react_agent/action_flow.py:action_flow"
   },
   "env": ".env",
   "auth": {

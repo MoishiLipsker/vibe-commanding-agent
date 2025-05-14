@@ -5,24 +5,8 @@ import aiohttp
 from fastapi.encoders import jsonable_encoder
 from react_agent.state import State
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
-
-def to_dict(obj: Any) -> Dict[str, Any]:
-    """Convert an object to a dictionary.
-    
-    Args:
-        obj: The object to convert
-        
-    Returns:
-        Dict[str, Any]: The dictionary representation of the object
-    """
-    if hasattr(obj, '__dict__'):
-        return {k: to_dict(v) for k, v in obj.__dict__.items()}
-    elif isinstance(obj, dict):
-        return {k: to_dict(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [to_dict(item) for item in obj]
-    else:
-        return obj
+from react_agent.nodes.trigger_notification import TriggerNotificationHandler
+from react_agent.configuration import Configuration
 
 async def api_agent(state: State) -> Dict[str, str]:
     """Execute API requests based on the current state.
@@ -34,22 +18,24 @@ async def api_agent(state: State) -> Dict[str, str]:
         Dict[str, str]: The response from the API.
     """
     base_url = "http://10.2.3.9:5000"
+    config = Configuration.from_context()
+    notification_handler = TriggerNotificationHandler(config)
     
     try:
         # Handle geographic rule with entity update/create
         if state.source_query_params and state.destination_query_params:
             # Create the trigger with the updated format
+            sourceQuery = state.source_query_params.filters
+            sourceQuery["type"] = state.source_query_params.entity_type
+            targetQuery = state.destination_query_params.filters
+            targetQuery["type"] = state.destination_query_params.entity_type
             trigger_data = {
                 "type": "geoRule",
-                "sourceQuery": {
-                    "properties": state.source_query_params
-                },
-                "targetQuery": state.destination_query_params,
+                "sourceQuery": sourceQuery,
+                "targetQuery": targetQuery,
                 "actions": [{
-                    "type": "updateEntity" if state.query_params_for_edit else "createEntity",
-                    "payload": {
-                        "properties": state.entity
-                    },
+                    "type": "updateEntity" if state.query_params_for_edit else "addEntity",
+                    "payload": state.entity,
                     "query": state.query_params_for_edit if state.query_params_for_edit else {}
                 }]
             }
@@ -64,14 +50,14 @@ async def api_agent(state: State) -> Dict[str, str]:
         
         # Handle regular query-based trigger
         elif state.trigger_parts:
+            query_params = state.query_params.filters
+            query_params["type"] = state.query_params.entity_type
             trigger_data = {
-                "type": "queryRule",
-                "sourceQuery": state.query_params,
+                "type": "layer",
+                "query": query_params,
                 "actions": [{
                     "type": "updateEntity" if state.query_params_for_edit else "createEntity",
-                    "payload": {
-                        "properties": state.entity
-                    },
+                    "payload": state.entity,
                     "query": state.query_params_for_edit if state.query_params_for_edit else {}
                 }]
             }
@@ -87,11 +73,8 @@ async def api_agent(state: State) -> Dict[str, str]:
         # Handle simple entity update
         elif state.query_params_for_edit:
             action_data = {
-                "type": "updateEntity",
-                "payload": {
-                    "properties": state.entity
-                },
-                "query": state.query_params_for_edit
+                "updates": state.entity,
+                "query": state.query_params_for_edit.filters #add type
             }
             
             async with aiohttp.ClientSession() as session:
@@ -112,12 +95,12 @@ async def api_agent(state: State) -> Dict[str, str]:
         
         # Handle queries
         elif state.query_params:
-            query_params = {} # state.query_params.filters
+            query_params = state.query_params.filters
             query_params["type"] = state.query_params.entity_type
             async with aiohttp.ClientSession() as session:
-                async with session.get(
+                async with session.post(
                     f"{base_url}/entities/query",
-                    params=jsonable_encoder(query_params)
+                    json=jsonable_encoder(query_params)
                 ) as response:
                     query_response = await response.json()
                     print(response.url)

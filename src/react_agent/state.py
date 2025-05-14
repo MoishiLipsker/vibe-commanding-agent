@@ -37,10 +37,14 @@ class EntityData(BaseModel):
     type: str = Field(..., description="The type of entity being created")
     properties: Dict = Field(..., description="The entity properties following the schema")
 
+
+
 class InputState(BaseModel):
     """Input state for the workflow."""
     #messages: List[Dict[str, str]]
     input: Optional[str] = None
+    position: Optional[dict] = None
+    selected_entity: Optional[dict] = None
     #entities: Optional[Dict] = None
     #schemas: Optional[Dict] = None
 
@@ -52,6 +56,8 @@ class OutputState(BaseModel):
 class State(BaseModel):
     """State for the workflow."""
     input: str = Field(..., description="The user's input")
+    position: Optional[dict] = None
+    selected_entity: Optional[dict] = None
     messages: Annotated[Sequence[BaseMessage], add_messages]
     flow_type: Optional[str] = Field(None, description="The type of flow: trigger, query, or action")
 

@@ -4,6 +4,8 @@ from typing import Dict, List, Optional, Any, Literal, Union
 import uvicorn
 from datetime import datetime
 import uuid
+from react_agent.nodes.trigger_notification import TriggerNotificationHandler
+from react_agent.configuration import Configuration
 
 app = FastAPI(title="Mock Entity Management Server")
 
@@ -182,6 +184,36 @@ async def delete_trigger(trigger_id: str):
             return {"status": "success", "message": f"Trigger {trigger_id} deleted"}
     
     raise HTTPException(status_code=404, detail=f"Trigger {trigger_id} not found")
+
+@app.post("/triggers/activate/{trigger_id}")
+async def trigger_activated(trigger_id: str, event_data: Dict[str, Any]):
+    """Handle trigger activation and generate notification."""
+    # Find the trigger
+    trigger = None
+    for t in triggers:
+        if t["id"] == trigger_id:
+            trigger = t
+            break
+    
+    if not trigger:
+        raise HTTPException(status_code=404, detail=f"Trigger {trigger_id} not found")
+    
+    # Create activation event data
+    activation_data = {
+        "event": "trigger_activated",
+        "trigger_id": trigger_id,
+        "trigger_type": trigger["type"],
+        "trigger_data": trigger,
+        "event_data": event_data,
+        "timestamp": get_current_time()
+    }
+    
+    # Use the notification handler to format the message
+    config = Configuration.from_context()
+    notification_handler = TriggerNotificationHandler(config)
+    notification = await notification_handler.process_trigger_event(activation_data)
+    
+    return notification
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=5005, reload=True) 
