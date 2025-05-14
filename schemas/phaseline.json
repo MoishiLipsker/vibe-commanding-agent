@@ -18,59 +18,42 @@
             "description": "Type of phase line",
             "enum": ["boundary", "checkpoint", "objective", "other"]
         },
-        "points": {
-            "type": "array",
-            "required": true,
-            "description": "Array of points defining the phase line",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "lat": {
-                        "type": "number",
-                        "required": true
-                    },
-                    "lon": {
-                        "type": "number",
-                        "required": true
-                    },
-                    "alt": {
-                        "type": "number",
-                        "required": false
-                    }
-                }
-            },
-            "minItems": 2
-        },
-        "style": {
+          "location": {
             "type": "object",
-            "required": false,
-            "description": "Visual style of the phase line",
-            "properties": {
-                "color": {
-                    "type": "string",
-                    "description": "Color of the phase line"
-                },
-                "width": {
+            "required": true,
+            "description": "Current location of the friendly force",
+            "properties": [{
+                "lat": {
                     "type": "number",
-                    "description": "Width of the line"
+                    "required": true
                 },
-                "dashed": {
-                    "type": "boolean",
-                    "description": "Whether the line is dashed"
+                "lon": {
+                    "type": "number",
+                    "required": true
                 }
-            }
+            }]
         },
         "description": {
             "type": "string",
             "required": false,
-            "description": "Additional description of the phase line's purpose"
+            "description": "Control measure for force coordination"
         },
-        "operation": {
+        "executingUnitId": {
             "type": "string",
             "required": false,
-            "description": "Associated operation or mission"
+            "description": "ID of the executing unit"
         },
-        "created_at": {
+        "createdBy": {
+            "type": "string",
+            "required": true,
+            "description": "User ID of the creator"
+        },
+        "updatedBy": {
+            "type": "string",
+            "required": true,
+            "description": "User ID of the last updater"
+        },
+        "creationTime": {
             "type": "string",
             "required": true,
             "description": "Timestamp of phase line creation",
@@ -79,8 +62,8 @@
         "updated_at": {
             "type": "string",
             "required": true,
-            "description": "Timestamp of last update",
+            "description": "Last update time",
             "format": "date-time"
         }
     }
-} 
+}
