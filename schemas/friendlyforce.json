@@ -39,59 +39,35 @@
                 }
             }
         },
-        "capabilities": {
-            "type": "array",
+        "isSOS": {
+            "type": "boolean",
             "required": false,
-            "description": "List of capabilities of the friendly force",
-            "items": {
-                "type": "string"
-            }
+            "description": "is the force in distress"
         },
-        "equipment": {
-            "type": "array",
+        "casualties": {
+            "type": "number",
             "required": false,
-            "description": "List of equipment carried by the friendly force",
-            "items": {
-                "type": "string"
-            }
+            "description": "The amount of casualties in the force"
         },
-        "personnel": {
-            "type": "object",
-            "required": false,
-            "description": "Personnel information",
-            "properties": {
-                "count": {
-                    "type": "integer",
-                    "required": true,
-                    "minimum": 0
-                },
-                "status": {
-                    "type": "string",
-                    "required": true,
-                    "enum": ["ready", "injured", "casualty"]
-                }
-            }
+        "unit": {
+            "type": "string",
+            "required": true,
+            "description": "The unit of the force",
+            "enum": ["1st Platoon", "2nd Platoon", "3rd Platoon", "1 DIV", "2 DIV"]
         },
-        "command": {
-            "type": "object",
-            "required": false,
-            "description": "Command information",
-            "properties": {
-                "unit": {
-                    "type": "string",
-                    "required": true
-                },
-                "commander": {
-                    "type": "string",
-                    "required": false
-                },
-                "parent_unit": {
-                    "type": "string",
-                    "required": false
-                }
-            }
+            "Company": {
+            "type": "string",
+            "required": true,
+            "description": "The company of the force",
+            "enum": ["Company A", "Company B", "Company C"]
         },
-        "last_updated": {
+       "created_at": {
+            "type": "string",
+            "required": true,
+            "description": "Timestamp of task creation",
+            "format": "date-time"
+        },
+        "updated_at": {
             "type": "string",
             "required": true,
             "description": "Timestamp of last update",
