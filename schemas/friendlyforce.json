@@ -16,7 +16,7 @@
             "type": "string",
             "required": true,
             "description": "Type of friendly force",
-            "enum": ["infantry", "vehicle", "aircraft", "ship", "other"]
+            "enum": ["infantry", "vehicle", "aircraft", "tank", "artillery", helicopter]
         },
         "status": {
             "type": "string",
@@ -53,13 +53,13 @@
             "type": "string",
             "required": true,
             "description": "The unit of the force",
-            "enum": ["1st Platoon", "2nd Platoon", "3rd Platoon", "1 DIV", "2 DIV"]
+            "enum": ["Company A", "Company B", "Company C", "1 DIV", "2 DIV"]
         },
-            "Company": {
+            "platoon": {
             "type": "string",
             "required": true,
-            "description": "The company of the force",
-            "enum": ["Company A", "Company B", "Company C"]
+            "description": "The platoon of the force",
+            "enum": ["1st Platoon", "2nd Platoon", "3rd Platoon"]
         },
        "created_at": {
             "type": "string",
