@@ -1,8 +1,8 @@
 {
-    "name": "ISRTask",
+    "type": "ISRTask",
     "description": "An Intelligence, Surveillance, and Reconnaissance task",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the ISR task"
@@ -16,6 +16,7 @@
             "type": "string",
             "required": true,
             "description": "Current status of the task",
+            "default":"pending",
             "enum": ["pending", "in_progress", "completed", "failed"]
         },
         "assigned_to": {
