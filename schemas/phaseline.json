@@ -1,8 +1,8 @@
 {
-    "name": "PhaseLine",
+    "type": "PhaseLine",
     "description": "A phase line entity representing a boundary or checkpoint in an operation",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the phase line"
@@ -15,6 +15,7 @@
         "lineType": {
             "type": "string",
             "required": true,
+            "default":"report",
             "description": "Type of phase line",
             "enum": ["boundary", "stop", "report", "coordination", "support"]
         },

@@ -1,8 +1,8 @@
 {
-    "name": "FireMission",
+    "type": "FireMission",
     "description": "A fire mission entity representing an artillery or air support mission",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the fire mission"
@@ -31,6 +31,7 @@
             "type": "string",
             "required": true,
             "description": "Current status of the fire mission",
+            "default":"pending",
             "enum": ["pending", "in_progress", "completed", "cancelled"]
         },
         "target": {

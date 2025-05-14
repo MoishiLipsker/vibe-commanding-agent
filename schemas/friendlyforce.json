@@ -1,8 +1,8 @@
 {
-    "name": "FriendlyForce",
+    "type": "force",
     "description": "A friendly force entity representing allied units or assets",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the friendly force"
@@ -21,6 +21,7 @@
         "status": {
             "type": "string",
             "required": true,
+            "default":"active",
             "description": "Current status of the friendly force",
             "enum": ["active", "inactive", "damaged", "destroyed"]
         },
@@ -42,6 +43,7 @@
         "isSOS": {
             "type": "boolean",
             "required": false,
+            "default":false,
             "description": "is the force in distress"
         },
         "casualties": {

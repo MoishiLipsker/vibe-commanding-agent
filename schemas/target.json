@@ -1,15 +1,16 @@
 {
-    "name": "Target",
+    "type": "target",
     "description": "A target entity representing a potential threat or objective",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the target"
         },
-        "type": {
+        "targetType": {
             "type": "string",
             "required": true,
+            "default":"building",
             "description": "Type of target (e.g., vehicle, building, person)",
             "enum": ["vehicle", "building", "person", "smoke"]
         },
@@ -31,6 +32,7 @@
         "status": {
             "type": "string",
             "required": true,
+            "default":"pending",
             "description": "Current status of the target",
             "enum": ["active", "destroyed", "pending"]
         },
