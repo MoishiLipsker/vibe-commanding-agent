@@ -47,7 +47,7 @@
             "type": "string",
             "required": true,
             "description": "Priority level of the fire mission",
-            "enum": [""HE-shell", "smoke", "precision-guided", "cluster"]
+            "enum": ["HE-shell", "smoke", "precision-guided", "cluster"]
         },
         "created_at": {
             "type": "string",
