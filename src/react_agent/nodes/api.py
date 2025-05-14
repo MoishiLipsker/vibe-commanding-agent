@@ -18,8 +18,6 @@ async def api_agent(state: State) -> Dict[str, str]:
         Dict[str, str]: The response from the API.
     """
     base_url = "http://10.2.3.9:5000"
-    config = Configuration.from_context()
-    notification_handler = TriggerNotificationHandler(config)
     
     try:
         # Handle geographic rule with entity update/create
@@ -33,6 +31,8 @@ async def api_agent(state: State) -> Dict[str, str]:
                 "type": "geoRule",
                 "sourceQuery": sourceQuery,
                 "targetQuery": targetQuery,
+                "rawTrigger": state.trigger_parts.query,
+                "rawAction": state.trigger_parts.action,
                 "actions": [{
                     "type": "updateEntity" if state.query_params_for_edit else "addEntity",
                     "payload": state.entity,
@@ -45,8 +45,8 @@ async def api_agent(state: State) -> Dict[str, str]:
                 print(json_trigger_data)
                 async with session.post(f"{base_url}/triggers/new", json=json_trigger_data) as response:
                     trigger_response = await response.json()
-                    return {"response": f"Successfully created trigger: {trigger_response}",
-                            "messages": [AIMessage(f"Successfully created trigger: {trigger_response}")]}
+                    return {"user_response": f"Successfully created trigger: {trigger_response}",
+                            }
         
         # Handle regular query-based trigger
         elif state.trigger_parts:
@@ -55,6 +55,8 @@ async def api_agent(state: State) -> Dict[str, str]:
             trigger_data = {
                 "type": "layer",
                 "query": query_params,
+                "rawTrigger": state.trigger_parts.query,
+                "rawAction": state.trigger_parts.action,
                 "actions": [{
                     "type": "updateEntity" if state.query_params_for_edit else "createEntity",
                     "payload": state.entity,
@@ -67,14 +69,16 @@ async def api_agent(state: State) -> Dict[str, str]:
                 print(json_trigger_data)
                 async with session.post(f"{base_url}/triggers/new", json=json_trigger_data) as response:
                     trigger_response = await response.json()
-                    return {"response": f"Successfully created trigger: {trigger_response}",
-                            "messages": [AIMessage(f"Successfully created trigger: {trigger_response}")]}
+                    return {"user_response": f"Successfully created trigger: {trigger_response}",
+                            }
         
         # Handle simple entity update
         elif state.query_params_for_edit:
+            query_params = state.query_params_for_edit.filters  
+            query_params["type"] = state.query_params_for_edit.entity_type
             action_data = {
                 "updates": state.entity,
-                "query": state.query_params_for_edit.filters #add type
+                "query": query_params
             }
             
             async with aiohttp.ClientSession() as session:
@@ -86,12 +90,12 @@ async def api_agent(state: State) -> Dict[str, str]:
                     return {"response": f"Successfully updated entity: {update_response}"}
         
         # Handle simple entity creation
-        elif state.entity:                       
+        elif state.entity:
+            entity = state.entity
             async with aiohttp.ClientSession() as session:
-                async with session.post(f"{base_url}/entities/add", json=jsonable_encoder(state.entity)) as response:
+                async with session.post(f"{base_url}/entities/add", json=jsonable_encoder(entity)) as response:
                     create_response = await response.json()
-                    return {"response": f"Successfully created entity: {create_response}",
-                            "messages": [AIMessage(f"Successfully created entity: {create_response}")]}
+                    return {"response": f"Successfully created entity: {create_response}"}
         
         # Handle queries
         elif state.query_params:
@@ -104,8 +108,7 @@ async def api_agent(state: State) -> Dict[str, str]:
                 ) as response:
                     query_response = await response.json()
                     print(response.url)
-                    return {"response": f"Query results: {query_response}",
-                            "messages": [AIMessage(f"Query results: {query_response}")]}
+                    return {"response": f"Query results: {query_response}"}
         
         return {"response": "No valid operation found in state"}
         

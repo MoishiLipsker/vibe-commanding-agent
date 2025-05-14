@@ -80,21 +80,25 @@ async def action_parser(state: State) -> Dict[str, EntityData]:
     You should return ONLY:
     {{
         "type": "target",
-        "data": {{
-            "priority": "high",
-            "location": {{
-                "lat": 32.123,
-                "lon": 34.456
-            }}
+        "properties": {{
+            "priority": "high"
+        }},
+        "position": {{
+            "lat": 32.123,
+            "lng": 34.456
         }}
     }}
     Note: This is just an example. The actual schema and fields will be different.
     
     Entity Schema:
     {schema}
+
+    Entity position (if not provided by the user):
+    {state.position}
     
     Expected output JSON structure:
     {entity_parser.get_format_instructions()}
+
     """
 
     prompt = ChatPromptTemplate.from_messages([

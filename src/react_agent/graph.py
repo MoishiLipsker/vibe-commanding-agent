@@ -15,6 +15,7 @@ from react_agent.nodes import (
     api_agent,
     entity_name_extract,
 )
+from react_agent.nodes.process_summary import process_summary
 
 
 def create_workflow() -> StateGraph:
@@ -37,6 +38,7 @@ def create_workflow() -> StateGraph:
     workflow.add_node("query_parser", query_parser)
     workflow.add_node("action_parser", action_parser)
     workflow.add_node("api_agent", api_agent)
+    workflow.add_node("process_summary", process_summary)
 
     
     # Add edges for classify_input
@@ -80,10 +82,11 @@ def create_workflow() -> StateGraph:
     workflow.add_edge("entity_name_extract", "query_parser")
     workflow.add_edge("query_parser", "action_parser")
     workflow.add_edge("action_parser", "api_agent")
+    # workflow.add_edge("api_agent", "process_summary")
+    # workflow.add_edge("process_summary", END)
     
     # Set the entry point
     workflow.set_entry_point("classify_input")
-    workflow.add_edge("api_agent", END)
 
     
     return workflow

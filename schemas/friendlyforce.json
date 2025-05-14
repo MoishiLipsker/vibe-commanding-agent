@@ -16,7 +16,7 @@
             "type": "string",
             "required": true,
             "description": "Type of friendly force",
-            "enum": ["infantry", "vehicle", "aircraft", "tank", "artillery", helicopter]
+            "enum": ["infantry", "vehicle", "aircraft", "tank", "artillery", "helicopter"]
         },
         "status": {
             "type": "string",

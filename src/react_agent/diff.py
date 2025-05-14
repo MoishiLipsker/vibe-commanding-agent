@@ -27,7 +27,6 @@ from langchain_openai import OpenAIEmbeddings
 #     "retrieve_my_texts",
 #     "Retrieve texts stored in the Qdrant collection",
 # )
-from langgraph_sdk.sse.
 
 tools = []
 
@@ -35,15 +34,4 @@ diff = create_react_agent(
       "anthropic:claude-3-5-haiku-latest",
       tools=tools,
       prompt="You are a friendly, curious, geeky AI.",
-)
-
-app = create_app(graph)
-
-# הוספת CORS פתוח
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # מאפשר מכל מקור
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
 )

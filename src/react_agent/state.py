@@ -15,7 +15,7 @@ class ActionType(str, Enum):
     """Types of actions that can be performed."""
     CREATE = "create_entity"
     UPDATE = "update_entity"
-    # UPDATE_WITHOUT_QUERY = "update_entity_without_query"
+    UPDATE_ENTITY_WITHOUT_QUERY = "update_entity_without_query"
 
 # --- Type Definitions ---
 
@@ -35,8 +35,8 @@ class ProcessedTrigger(BaseModel):
 
 class EntityData(BaseModel):
     type: str = Field(..., description="The type of entity being created")
-    properties: Dict = Field(..., description="The entity properties following the schema")
-
+    fields: Dict = Field(..., description="The entity properties following the schema")
+    position: Dict = Field(..., description="The position of the entity")
 
 
 class InputState(BaseModel):
@@ -51,6 +51,7 @@ class InputState(BaseModel):
 class OutputState(BaseModel):
     """output state for the workflow."""
     response: Optional[str] = Field(None, description="Response from the API call")
+    summary: Optional[str] = Field(None, description="Natural language summary of what happened")
     messages: Annotated[Sequence[BaseMessage], add_messages]
 
 class State(BaseModel):
@@ -82,9 +83,10 @@ class State(BaseModel):
     entity: Optional[EntityData] = Field(None, description="The action entity parameters")
        
     # API specific
-    api_response: Optional[dict] = Field(None, description="Response from API calls")
+    api_response: Optional[str] = Field(None, description="Response from API calls")
     user_response: Optional[str] = Field(None, description="User response to the API call")
     response: Optional[str] = Field(None, description="Response from the API call")
+    summary: Optional[str] = Field(None, description="Natural language summary of what happened")
     
     # Status tracking
     status: Optional[str] = Field(None, description="Current status of the workflow")
