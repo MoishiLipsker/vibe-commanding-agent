@@ -8,7 +8,7 @@ from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from react_agent.nodes.trigger_notification import TriggerNotificationHandler
 from react_agent.configuration import Configuration
 from react_agent.utils import load_chat_model
-
+import random
 
 class TriggerExplanationHandler:
     """Class for generating human-readable explanations of trigger creation.
@@ -43,14 +43,10 @@ class TriggerExplanationHandler:
         str
             A human-readable explanation of what was created
         """
-        system_prompt = """You are a helpful assistant that explains trigger creation in a system.
-        Explain clearly and concisely:
-        1. What type of trigger was created
-        2. What conditions will activate the trigger
-        3. What actions will be performed when triggered
-        
-        Keep the explanation brief but informative, using natural language.
-        End with a note about managing the trigger in the triggers page."""
+        system_prompt = """You are an assistant that generates concise notifications for trigger creation events.
+        Provide a single, direct sentence in English, stating precisely what trigger was created and its main purpose.
+        This notification is for a professional C&C system operator and should be brief and to the point.
+        Include a brief instruction for managing the trigger on the triggers page."""
         
         trigger_info = f"""
         Trigger Configuration:
@@ -107,19 +103,17 @@ class QueryExplanationHandler:
         str
             A human-readable explanation with markdown table of results
         """
-        system_prompt = """You are a helpful assistant that explains query results in a system.
-        Your task is to:
-        1. Explain what query was performed and its parameters
-        2. Create a markdown table showing only the most relevant fields for the client
-        3. Keep the explanation clear and concise
-        4. Format numbers and dates in a human-readable way
+        system_prompt = """You are an assistant that generates concise notifications for query results.
+        Provide a single, direct sentence in English, stating that the query was executed and briefly what it was for.
+        Then, present a concise markdown table with the most relevant fields.
+        This notification is for a professional C&C system operator.
         
         For the markdown table:
-        - Only include fields that are meaningful to end users
-        - Exclude technical fields like IDs, timestamps, etc. unless specifically relevant
-        - Format the table headers in a user-friendly way
-        - Align numeric columns to the right
-        - Use proper markdown table syntax"""
+        - Include only fields meaningful to the end-user.
+        - Exclude technical fields (e.g., IDs, timestamps) unless specifically relevant.
+        - Use user-friendly table headers.
+        - Right-align numeric columns.
+        - Ensure correct markdown syntax."""
         
         query_info = f"""
         Query Parameters:
@@ -169,22 +163,19 @@ class EntityPreviewHandler:
         str
             A human-readable preview with markdown table and confirmation request
         """
-        system_prompt = """You are a helpful assistant that previews entity creation in a system.
-        Your task is to:
-        1. Create a clear preview of the entity to be created
-        2. Format the data in a markdown table
-        3. Show only relevant fields for the user
-        4. Add a clear confirmation request at the end
+        system_prompt = """You are an assistant that generates concise notifications for entity creation previews.
+        Provide a single, direct sentence in English, stating that an entity is ready for creation.
+        Then, present a concise markdown table with the entity details.
+        This notification is for a professional C&C system operator.
         
         For the markdown table:
-        - Include all important fields that define the entity
-        - Format field names in a user-friendly way
-        - Use clear value formatting for dates, numbers, etc.
-        - Use proper markdown table syntax with appropriate alignment
+        - Include all essential fields defining the entity.
+        - Field names should be user-friendly.
+        - Values (dates, numbers, etc.) should be clearly formatted.
+        - Ensure correct markdown syntax and appropriate alignment.
         
-        End the message with:
-        "Would you like to proceed with creating this entity? (Please respond with 'yes' to confirm or 'no' to cancel)"
-        """
+        Conclude with the exact phrase:
+        'Proceed with creating this entity? (Respond \'yes\' to confirm, \'no\' to cancel).'"""
         
         entity_info = f"""
         Entity to be created:
@@ -196,6 +187,61 @@ class EntityPreviewHandler:
             HumanMessage(content=entity_info)
         ]
         
+        response = await self.model.ainvoke(messages)
+        return response.content
+
+
+class UpdateExplanationHandler:
+    """Class for generating human-readable explanations of entity updates.
+
+    Parameters
+    ----------
+    None
+
+    Attributes
+    ----------
+    model : Any
+        The chat model used for explanation generation
+    """
+
+    def __init__(self):
+        """Initialize the UpdateExplanationHandler with model."""
+        configuration = Configuration.from_context()
+        self.model = load_chat_model(configuration.model)
+
+    async def explain_entity_update(self, action_data: Dict[str, Any], update_response: Dict[str, Any]) -> str:
+        """Generate a human-readable explanation of the entity update.
+
+        Parameters
+        ----------
+        action_data : Dict[str, Any]
+            The data used for the update action, including query and payload
+        update_response : Dict[str, Any]
+            The response from the update API
+
+        Returns
+        -------
+        str
+            A human-readable explanation of what was updated
+        """
+        system_prompt = """You are an assistant that generates concise notifications for entity update events.
+        Provide a single, direct sentence in English, stating precisely which entities were updated (or targeted for update), what was changed, and the outcome.
+        This notification is for a professional C&C system operator and should be brief and to the point."""
+
+        update_info = f"""
+        Update Action Data:
+        Target Query: {action_data.get('query')}
+        Updates Applied: {action_data.get('updates')}
+
+        API Response:
+        {update_response}
+        """
+
+        messages = [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=update_info)
+        ]
+
         response = await self.model.ainvoke(messages)
         return response.content
 
@@ -213,14 +259,15 @@ async def api_agent(state: State) -> Dict[str, str]:
     explanation_handler = TriggerExplanationHandler()
     query_handler = QueryExplanationHandler()
     entity_preview_handler = EntityPreviewHandler()
+    update_explanation_handler = UpdateExplanationHandler()
     
     try:
         # Handle geographic rule with entity update/create
         if state.source_query_params and state.destination_query_params:
             # Create the trigger with the updated format
-            sourceQuery = state.source_query_params.filters
+            sourceQuery = {f"fields.{k}" if k != "type" else k: v for k, v in state.source_query_params.filters.items()}
             sourceQuery["type"] = state.source_query_params.entity_type
-            targetQuery = state.destination_query_params.filters
+            targetQuery = {f"fields.{k}" if k != "type" else k: v for k, v in state.destination_query_params.filters.items()}
             targetQuery["type"] = state.destination_query_params.entity_type
             trigger_data = {
                 "type": "geoRule",
@@ -241,11 +288,11 @@ async def api_agent(state: State) -> Dict[str, str]:
                 async with session.post(f"{base_url}/triggers/new", json=json_trigger_data) as response:
                     trigger_response = await response.json()
                     explanation = await explanation_handler.explain_trigger_creation(trigger_data, trigger_response)
-                    return {"user_response": explanation}
+                    return {"response": explanation}
         
         # Handle regular query-based trigger
         elif state.trigger_parts:
-            query_params = state.query_params.filters
+            query_params = {f"fields.{k}" if k != "type" else k: v for k, v in state.query_params.filters.items()}
             query_params["type"] = state.query_params.entity_type
             trigger_data = {
                 "type": "layer",
@@ -265,11 +312,11 @@ async def api_agent(state: State) -> Dict[str, str]:
                 async with session.post(f"{base_url}/triggers/new", json=json_trigger_data) as response:
                     trigger_response = await response.json()
                     explanation = await explanation_handler.explain_trigger_creation(trigger_data, trigger_response)
-                    return {"user_response": explanation}
+                    return {"response": explanation}
         
         # Handle simple entity update
         elif state.query_params_for_edit:
-            query_params = state.query_params_for_edit.filters  
+            query_params = {f"fields.{k}" if k != "type" else k: v for k, v in state.query_params_for_edit.filters.items()}  
             query_params["type"] = state.query_params_for_edit.entity_type
             action_data = {
                 "updates": state.entity,
@@ -282,12 +329,18 @@ async def api_agent(state: State) -> Dict[str, str]:
                     json=jsonable_encoder(action_data)
                 ) as response:
                     update_response = await response.json()
-                    return {"response": f"Successfully updated entity: {update_response}"}
+                    explanation = await update_explanation_handler.explain_entity_update(action_data, update_response)
+                    return {"response": explanation}
         
         # Handle simple entity creation
         elif state.entity:
             entity = state.entity
             entity.fields["position"] = entity.position
+            if "name" not in entity.fields or entity.fields["name"] is None:
+                # add generic name if not provided
+                entity.fields["name"] = entity.type + " " + str(random.randint(1, 1000000))
+                
+
             async with aiohttp.ClientSession() as session:
                  async with session.post(f"{base_url}/entities/add", json=jsonable_encoder(entity)) as response:
                      create_response = await response.json()
@@ -306,7 +359,7 @@ async def api_agent(state: State) -> Dict[str, str]:
         
         # Handle queries
         elif state.query_params:
-            query_params = state.query_params.filters
+            query_params = {f"fields.{k}" if k != "type" else k: v for k, v in state.query_params.filters.items()}
             query_params["type"] = state.query_params.entity_type
             async with aiohttp.ClientSession() as session:
                 async with session.post(

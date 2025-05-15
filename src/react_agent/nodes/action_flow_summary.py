@@ -68,20 +68,15 @@ class ActionFlowSummaryHandler:
             Dictionary containing the streaming explanation message
         """
         prompt = ChatPromptTemplate.from_messages([
-            SystemMessage(content="""You are a helpful assistant that explains action flow events in a clear way.
-            Explain what triggered the event, what it means, and what actions will be taken.
-            Use natural language that is easy to understand, focusing on the business impact."""),
+            SystemMessage(content="""You are an assistant that generates concise notifications for action flow events.
+            Provide a single, direct sentence in English, stating precisely what action will be taken and its direct trigger.
+            This notification is for a professional C&C system operator and should be brief and to the point."""),
             HumanMessagePromptTemplate.from_template(
-                """An action flow event has occurred with these details:
-                
-                Trigger: {trigger}
-                Entities: {entities}
-                Planned Action: {action}
-                
-                Please explain:
-                1. What event occurred and why
-                2. What this means for the system and business
-                3. What specific actions will be taken next"""
+                """Action flow event details:
+Trigger: {trigger}
+Entities: {entities}
+Planned Action: {action}
+Notification:"""
             )
         ])
         
@@ -101,7 +96,7 @@ async def process_action_flow_event(
     trigger_query: str,
     entities: List[Dict[str, Any]],
     planned_action: str
-) -> AsyncGenerator[Dict[str, str], None]:
+) -> str:
     """
     Generate a streaming explanation of an action flow event.
     
@@ -114,10 +109,10 @@ async def process_action_flow_event(
     planned_action : str
         The action that will be executed
         
-    Yields
-    ------
-    Dict[str, str]
-        Dictionary containing the streaming explanation message
+    Returns
+    -------
+    str
+        A string containing the full explanation message
     """
     handler = ActionFlowSummaryHandler()
     event = ActionFlowEvent(
@@ -126,5 +121,7 @@ async def process_action_flow_event(
         planned_action=planned_action
     )
     
-    async for explanation in handler.explain_event(event):
-        yield explanation 
+    full_explanation = ""
+    async for explanation_chunk in handler.explain_event(event):
+        full_explanation = explanation_chunk["explanation"]
+    return full_explanation 

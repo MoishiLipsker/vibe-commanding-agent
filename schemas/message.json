@@ -1,5 +1,5 @@
 {
-    "type": "Message",
+    "type": "message",
     "description": "A message entity for sending notifications and alerts",
     "fields": {
         "_id": {

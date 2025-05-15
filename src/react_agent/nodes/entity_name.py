@@ -14,14 +14,15 @@ from react_agent.state import State
 
 class EntityType(str, Enum):
     """Available entity types."""
-    TARGET = "Target"
-    ISR_TASK = "ISRTask"
-    ARROW = "Arrow"
-    FRIENDLY_FORCE = "FriendlyForce"
-    PHASE_LINE = "PhaseLine"
-    CASEVAC_TASK = "CASEVACTask"
-    FIRE_MISSION = "FireMission"
-    MESSAGE = "Message"
+    # TARGET = "target"
+    ISR_TASK = "isrtask"
+    ARROW = "arrow"
+    FORCE = "force"
+    PHASE_LINE = "phaseline"
+    CASEVAC_TASK = "casevactask"
+    FIRE_MISSION = "firemission"
+    ENEMY_TRACK = "enemytrack"
+    MESSAGE = "message"
 
 
 class EntityExtraction(BaseModel):
@@ -41,11 +42,11 @@ Expected output JSON structure:
 """
 
 FEW_SHOT = [
-    HumanMessage("Create a new target at coordinates 32.123, 34.456"),
-    AIMessage(EntityExtraction(
-        entity_type=EntityType.TARGET,
-        explanation="The user explicitly mentions 'target' and provides coordinates, which is typical for target entities"
-    ).model_dump_json()),
+    # HumanMessage("Create a new target at coordinates 32.123, 34.456"),
+    # AIMessage(EntityExtraction(
+    #     entity_type=EntityType.TARGET,
+    #     explanation="The user explicitly mentions 'target' and provides coordinates, which is typical for target entities"
+    # ).model_dump_json()),
     
     HumanMessage("Send an alert to all users about system maintenance"),
     AIMessage(EntityExtraction(

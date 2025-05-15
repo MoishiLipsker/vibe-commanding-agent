@@ -1,8 +1,8 @@
 {
-    "name": "CASEVACTask",
+    "type": "casevactask",
     "description": "A Casualty Evacuation task entity",
     "fields": {
-        "id": {
+        "_id": {
             "type": "string",
             "required": true,
             "description": "Unique identifier for the CASEVAC task"
@@ -24,10 +24,10 @@
             "description": "Current status of the CASEVAC task",
             "enum": ["pending", "in_progress", "completed", "cancelled"]
         },
-        "location": {
+        "position": {
             "type": "object",
             "required": true,
-            "description": "Location of the casualty",
+            "description": "position of the casualty",
             "properties": {
                 "lat": {
                     "type": "number",

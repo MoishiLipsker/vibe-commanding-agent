@@ -7,10 +7,10 @@
             "required": true,
             "description": "Unique identifier for the arrow"
         },
-         "location": {
+         "position": {
             "type": "object",
             "required": true,
-            "description": "Current location of the phase line",
+            "description": "Current location of the arrow",
             "properties": [{
                 "lat": {
                     "type": "number",

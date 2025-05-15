@@ -1,5 +1,5 @@
 {
-    "type": "ISRTask",
+    "type": "isrtask",
     "description": "An Intelligence, Surveillance, and Reconnaissance task",
     "fields": {
         "_id": {
@@ -24,7 +24,7 @@
             "required": false,
             "description": "ID of the unit or asset assigned to the task"
         },
-        "location": {
+        "position": {
             "type": "object",
             "required": true,
             "description": "Current location of the isr task",

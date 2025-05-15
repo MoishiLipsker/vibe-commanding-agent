@@ -95,6 +95,9 @@ async def action_parser(state: State) -> Dict[str, EntityData]:
 
     Entity position (if not provided by the user):
     {state.position}
+
+    Unit:
+    {state.unit}
     
     Expected output JSON structure:
     {entity_parser.get_format_instructions()}

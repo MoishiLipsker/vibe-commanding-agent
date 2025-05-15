@@ -1,5 +1,5 @@
 {
-    "type": "FireMission",
+    "type": "firemission",
     "description": "A fire mission entity representing an artillery or air support mission",
     "fields": {
         "_id": {
@@ -12,7 +12,7 @@
             "required": true,
             "description": "Name of the fire mission"
         },
-        "location": {
+        "position": {
             "type": "object",
             "required": true,
             "description": "Current location of the fire mission",

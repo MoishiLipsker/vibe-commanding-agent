@@ -83,4 +83,4 @@ async def classify_input(state: State) -> Dict[str, str]:
 
     result = await splitter_chain.ainvoke({"input": state.input})
     
-    return {"flow_type": result.flow_type.value, "messages": [HumanMessage(state.input)]} 
+    return {"flow_type": result.flow_type.value} 

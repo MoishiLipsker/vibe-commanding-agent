@@ -51,15 +51,13 @@ class InputState(BaseModel):
 class OutputState(BaseModel):
     """output state for the workflow."""
     response: Optional[str] = Field(None, description="Response from the API call")
-    summary: Optional[str] = Field(None, description="Natural language summary of what happened")
-    messages: Annotated[Sequence[BaseMessage], add_messages]
 
 class State(BaseModel):
     """State for the workflow."""
     input: str = Field(..., description="The user's input")
+    unit: str = Field("Company B", description="The unit of the force")
     position: Optional[dict] = None
     selected_entity: Optional[dict] = None
-    messages: Annotated[Sequence[BaseMessage], add_messages]
     flow_type: Optional[str] = Field(None, description="The type of flow: trigger, query, or action")
 
     trigger_parts: Optional[TriggerParts] = Field(None, description="The parts of a trigger")
