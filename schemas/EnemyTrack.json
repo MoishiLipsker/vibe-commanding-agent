@@ -12,6 +12,12 @@
             "required": true,
             "description": "Name or designation of the enemy force"
         },
+        "icon":{
+            "type": "string",
+            "required": true,
+            "description": "Type of enemy force",
+            "default": "track.svg"
+        },
         "weapon": {
             "type": "string",
             "required": true,
@@ -24,7 +30,7 @@
             "description": "Current status of the enemy force",
             "enum": ["active", "inactive", "destroyed"]
         },
-        "location": {
+        "position": {
             "type": "object",
             "required": true,
             "description": "Current location of the enemy force",
