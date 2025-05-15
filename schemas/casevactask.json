@@ -24,7 +24,7 @@
             "description": "Current status of the CASEVAC task",
             "enum": ["pending", "in_progress", "completed", "cancelled"]
         },
-        "location": {
+        "position": {
             "type": "object",
             "required": true,
             "description": "Location of the casualty",
