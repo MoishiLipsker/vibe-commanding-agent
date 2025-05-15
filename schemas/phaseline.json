@@ -19,7 +19,7 @@
             "description": "Type of phase line",
             "enum": ["boundary", "stop", "report", "coordination", "support"]
         },
-          "location": {
+          "position": {
             "type": "object",
             "required": true,
             "description": "Current location of the friendly force",
