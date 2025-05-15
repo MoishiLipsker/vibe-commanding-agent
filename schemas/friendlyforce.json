@@ -25,7 +25,13 @@
             "description": "Current status of the friendly force",
             "enum": ["active", "inactive", "damaged", "destroyed"]
         },
-        "location": {
+         "icon":{
+            "type": "string",
+            "required": true,
+            "description": "Type of enemy force",
+            "default": "tank.svg"
+        },
+        "position": {
             "type": "object",
             "required": true,
             "description": "Current location of the friendly force",
