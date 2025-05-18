@@ -294,6 +294,9 @@ async def api_agent(state: State) -> Dict[str, str]:
         elif state.trigger_parts:
             query_params = {f"fields.{k}" if k != "type" else k: v for k, v in state.query_params.filters.items()}
             query_params["type"] = state.query_params.entity_type
+            payload = state.entity
+            if "name" not in payload.fields or payload.fields["name"] is None:
+                payload.fields["name"] = payload.type + " " + str(random.randint(1, 1000000))
             trigger_data = {
                 "type": "layer",
                 "query": query_params,
@@ -301,7 +304,7 @@ async def api_agent(state: State) -> Dict[str, str]:
                 "rawAction": state.trigger_parts.action,
                 "actions": [{
                     "type": "updateEntity" if state.query_params_for_edit else "createEntity",
-                    "payload": state.entity,
+                    "payload": payload,
                     "query": state.query_params_for_edit if state.query_params_for_edit else {}
                 }]
             }

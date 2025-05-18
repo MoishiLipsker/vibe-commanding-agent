@@ -15,13 +15,14 @@ client = QdrantClient(url="http://10.2.3.9:6333")
 retriever = vector_store = QdrantVectorStore(
      client=client,
      collection_name="entities",
-     embedding=OpenAIEmbeddings(model="text-embedding-3-small"),
+     embedding=OpenAIEmbeddings(model="text-embedding-3-small")
 ).as_retriever()
+
 
 retriever_tool = create_retriever_tool(
     retriever,
-    "retrieve_my_texts",
-    "Retrieve relevant entities from the vector database to answer investigative questions.",
+    "retrieve_entities",
+    "Retrieve relevant entities from the vector database to answer investigative questions."
 )
 
 tools = [retriever_tool]

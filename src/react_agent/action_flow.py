@@ -106,6 +106,8 @@ Available Entities (use these to find information like IDs):
 {entities_str}
 ```
 
+
+
 Trigger Context:
 {trigger_query_context}
 
